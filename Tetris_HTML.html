@@ -1,0 +1,1091 @@
+<html>
+	<head>
+		<title>Tetris</title>
+	</head>
+	<style>
+		h1{
+		color:#00FF00;
+		font-family: "Comic Sans MS";
+		}
+		table {    
+			border-collapse: collapse;
+		}
+		td, th {
+			border: 1px solid #C0C0C0;
+		}
+	</style>
+	<script>
+		function push(event){
+			if (event.keyCode == 39)
+				rightclick();
+			if (event.keyCode == 37)
+				leftclick();
+			if (event.keyCode == 40)
+				downclick();
+			if (event.keyCode == 38) {
+				upclick();
+				sandlock=false;
+			}
+		}
+	</script>
+	<body onkeydown="push(event)";>
+		<h1 id="title">Tetris</h>
+		<div style="position: absolute; width:200px; height:400px; overflow: hidden; border:2px solid #00FF00;">
+			<table id="table"; width="200"; height="400"> 
+				<tr id="tr"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+			</table>
+			<img id="gameover" src="C:\Users\jaesu\OneDrive\Pictures\pixel_skull.png" style="position: absolute; top: 90; left:25; visibility: hidden">
+		</div>
+		<label id="score_label">0</label>
+		<script>
+			var box = new Array(20);
+			var i;
+			var j;
+			var z;
+			var x=4;
+			var y=-1;
+			var colour;
+			var r = Math.floor(Math.random()*7);
+			setcolor();
+			var right_max;
+			var left_max;
+			var sandwich=0;
+			var top_max;
+			var sandlock=false;
+			var gameover=document.getElementById("gameover");
+			var point=false;
+			var score=0;
+				setmax();
+			Tr=document.getElementById("tr");
+			for (i=0; i<20; i++){
+				Td=Tr.firstChild;
+				box[i] = new Array(10);
+				for (j=0; j<10; j++){
+					box[i][j] = Td;
+					Td=Td.nextElementSibling;
+				}
+				Tr=Tr.nextElementSibling;
+			}
+			function gravity() {
+				if (gameover.style.visibility=="hidden") {
+					block(x,y,"white");
+				if(y<top_max && check(0,1)==true){
+					y=y+1;
+						if (r==0) 
+							block(x,y,"blue");				
+						if (r==1) 
+							block(x,y,"green");
+						if (r==2) 
+							block(x,y,"yellow");
+						if (r==3) 
+							block(x,y,"red");
+						if (r==4) 
+							block(x,y,"purple");
+						if (r==5)
+							block(x,y,"deeppink");
+						if (r==6) 
+							block(x,y,"black");
+					setTimeout(gravity, 800);
+				}
+				else {
+					if (r==0)
+					block(x,y,"blue");
+					if (r==1)
+					block(x,y,"green");
+					if (r==2)
+					block(x,y,"yellow");
+					if (r==3) 
+					block(x,y,"red");
+					if (r==4) 
+					block(x,y,"purple");
+					if (r==5) 
+					block(x,y,"deeppink");
+					if (r==6) 
+					block(x,y,"black");
+					for (i=19; i>0; i--) {	
+						point=false;
+						for (j=0; j<10; j++) {
+							if (box[i][j].bgColor == "white" || box[i][j].bgColor == "#FFFFFF" || box[i][j].bgColor == "")
+								point=true;
+						}
+						if (point==false) {
+							for (z=i; z>0; z--) {
+								for (j=0; j<10; j++) 
+									box[z][j].bgColor=box[z-1][j].bgColor;
+							}
+							score=score+1; 
+							score_label.innerHTML=score;
+							i=i+1;
+						}
+					}
+						x=4;
+						y=-1;
+						r = Math.floor(Math.random()*7);
+						setcolor();
+						sandwich=0;
+						setmax();
+						if (check(0,1)==false)
+							gameover.style.visibility="visible";
+						setTimeout(gravity, 800);
+					}
+				}
+			}
+			function setcolor() {
+				if (r==0)
+					colour="blue";
+				if (r==1)
+					colour="green";
+				if (r==2)
+					colour="yellow";
+				if (r==3)
+					colour="red";
+				if (r==4)
+					colour="purple";
+				if (r==5)
+					colour="deeppink";
+				if (r==6)
+					colour="black";
+			}
+			function setmax() {
+				if (sandwich==0) {
+					if (r==0) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==1) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==2) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==3) {
+						right_max=8;
+						left_max=1;
+						top_max=19;
+					}
+					if (r==4) {
+						right_max=8;
+						left_max=1;
+						top_max=19;
+					}
+					if (r==5) {
+						right_max=8;
+						left_max=1;
+						top_max=19;
+					}
+					if (r==6) {
+						right_max=9;
+						left_max=0;
+						top_max=19;
+					}
+				}
+				if (sandwich==1) {
+					if (r==0) {
+						right_max=7;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==1) {
+						right_max=7;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==2) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==3) {
+						right_max=8;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==4) {
+						right_max=8;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==5) {
+						right_max=8;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==6) {
+						right_max=7;
+						left_max=1;
+						top_max=19;
+					}
+				}
+				if (sandwich==2) {
+					if (r==0) {
+						right_max=9;
+						left_max=1;
+						top_max=17;
+					}
+					if (r==1) {
+						right_max=9;
+						left_max=1;
+						top_max=17;
+					}
+					if (r==2) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==3) {
+						right_max=8;
+						left_max=1;
+						top_max=19;
+					}
+					if (r==4) {
+						right_max=8;
+						left_max=1;
+						top_max=19;
+					}
+					if (r==5) {
+						right_max=8;
+						left_max=1;
+						top_max=18;
+					}
+					if (r==6) {
+						right_max=9;
+						left_max=0;
+						top_max=18;
+					}
+				}
+				if (sandwich==3) {
+					if (r==0) {
+						right_max=9;
+						left_max=2;
+						top_max=19;
+					}
+					if (r==1) {
+						right_max=9;
+						left_max=2;
+						top_max=19;
+					}
+					if (r==2) {
+						right_max=8;
+						left_max=0;
+						top_max=19;
+					}
+					if (r==3) {
+						right_max=8;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==4) {
+						right_max=8;
+						left_max=0;
+						top_max=18;
+					}
+					if (r==5) {
+						right_max=9;
+						left_max=1;
+						top_max=18;
+					}
+					if (r==6) {
+						right_max=7;
+						left_max=1;
+						top_max=19;
+					}
+				}
+			}
+			function block(x,y,color) {
+				if (sandwich==0) {
+					if (r==0){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y-2>-1)
+							box[y-2][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+					}
+					if (r==1){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y-2>-1)
+							box[y-2][x+1].bgColor=color;
+					}
+					if (r==2){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==3){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==4){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x-1].bgColor=color;
+					}
+					if (r==5){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==6){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y-2>-1)
+							box[y-2][x].bgColor=color;
+						if (y-3>-1)
+							box[y-3][x].bgColor=color;
+					}
+				}
+				if (sandwich==1) {
+					if (r==0) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x+2].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+					}
+					if (r==1) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x+2].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+					}
+					if (r==2) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==3) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;	
+					}
+					if (r==4){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+					}
+					if (r==5) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==6) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x+2].bgColor=color;
+					}
+				}
+				if (sandwich==2) {
+					if (r==0) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y+2>-1)
+							box[y+2][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==1) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x-1].bgColor=color;
+						if (y+2>-1)
+							box[y+2][x-1].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==2) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==3){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==4){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x-1].bgColor=color;
+					}
+					if (r==5) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+					}
+					if (r==6){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+						if (y-2>-1)
+							box[y-2][x].bgColor=color;
+					}
+				}
+				if (sandwich==3) {
+					if (r==0) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+						if (y>-1)
+							box[y][x-2].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==1) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x-1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x-2].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==2) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==3) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x+1].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;	
+					}
+					if (r==4){
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x+1].bgColor=color;
+					}
+					if (r==5) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+						if (y+1>-1)
+							box[y+1][x].bgColor=color;
+						if (y-1>-1)
+							box[y-1][x].bgColor=color;
+					}
+					if (r==6) {
+						if (y>-1)
+							box[y][x].bgColor=color;
+						if (y>-1)
+							box[y][x-1].bgColor=color;
+						if (y>-1)
+							box[y][x+1].bgColor=color;
+						if (y>-1)
+							box[y][x+2].bgColor=color;
+					}
+				}
+			}
+			function rightclick(){
+				block(x,y,"white");
+				if(x<right_max && check(1,0)==true){
+					x=x+1;
+				}
+					block(x,y,colour);
+			}
+			function leftclick(){
+				block(x,y,"white");
+				if(x>left_max && check(-1,0)==true) {
+					x=x-1;
+				}
+					block(x,y,colour);
+			}
+			function downclick(){
+				block(x,y,"white");
+				if(y<top_max && check(0,1)==true) {
+					y=y+1;
+				}
+					block(x,y,colour);
+			}
+			function upclick() {
+				if (x<right_max && x>left_max) {
+					if (sandwich==0 && sandlock==false) {
+						if (r==0)
+							block(x,y,"white");
+						if (r==1)
+							block(x,y,"white");
+						if (r==2)
+							block(x,y,"white");
+						if (r==3)
+							block(x,y,"white");
+						if (r==4)
+							block(x,y,"white");
+						if (r==5)
+							block(x,y,"white");
+						if (r==6)
+							block(x,y,"white");
+						sandwich=1;
+						if (check(0,0)==false)
+						sandwich=0;
+						if (r==0)
+							block(x,y,"blue");
+						if (r==1)
+							block(x,y,"green");
+						if (r==2)
+							block(x,y,"yellow");
+						if (r==3)
+							block(x,y,"red");
+						if (r==4)
+							block(x,y,"purple");
+						if (r==5)
+							block(x,y,"deeppink");
+						if (r==6)
+							block(x,y,"black");
+						sandlock=true;
+						}
+					if 	(sandwich==1 && sandlock==false) {
+						if (r==0)
+							block(x,y,"white");
+						if (r==1)
+							block(x,y,"white");
+						if (r==2)
+							block(x,y,"white");
+						if (r==3)
+							block(x,y,"white");
+						if (r==4)
+							block(x,y,"white");
+						if (r==5)
+							block(x,y,"white");
+						if (r==6)
+							block(x,y,"white");
+						sandwich=2;
+						if (check(0,0)==false)
+						sandwich=1;
+						if (r==0)
+							block(x,y,"blue");
+						if (r==1)
+							block(x,y,"green");
+						if (r==2)
+							block(x,y,"yellow");
+						if (r==3)
+							block(x,y,"red");
+						if (r==4)
+							block(x,y,"purple");
+						if (r==5)
+							block(x,y,"deeppink");
+						if (r==6)
+							block(x,y,"black");
+							sandlock=true;
+						}
+					if (sandwich==2 && sandlock==false) {
+						if (r==0)
+							block(x,y,"white");
+						if (r==1)
+							block(x,y,"white");
+						if (r==2)
+							block(x,y,"white");
+						if (r==3)
+							block(x,y,"white");
+						if (r==4)
+							block(x,y,"white");
+						if (r==5)
+							block(x,y,"white");
+						if (r==6)
+							block(x,y,"white");
+						sandwich=3;
+						if (check(0,0)==false)
+						sandwich=2;
+						if (r==0)
+							block(x,y,"blue");
+						if (r==1)
+							block(x,y,"green");
+						if (r==2)
+							block(x,y,"yellow");
+						if (r==3)
+							block(x,y,"red");
+						if (r==4)
+							block(x,y,"purple");
+						if (r==5)
+							block(x,y,"deeppink");
+						if (r==6)
+							block(x,y,"black");
+							sandlock=true;
+						}
+					if (sandwich==3 && sandlock==false) {
+						if (r==0)
+							block(x,y,"white");
+						if (r==1)
+							block(x,y,"white");
+						if (r==2)
+							block(x,y,"white");
+						if (r==3)
+							block(x,y,"white");
+						if (r==4)
+							block(x,y,"white");
+						if (r==5)
+							block(x,y,"white");
+						if (r==6)
+							block(x,y,"white");
+						sandwich=0;
+						if (check(0,0)==false)
+						sandwich=3;
+						if (r==0)
+							block(x,y,"blue");
+						if (r==1)
+							block(x,y,"green");
+						if (r==2)
+							block(x,y,"yellow");
+						if (r==3)
+							block(x,y,"red");
+						if (r==4)
+							block(x,y,"purple");
+						if (r==5)
+							block(x,y,"deeppink");
+						if (r==6)
+							block(x,y,"black");
+						sandlock=true;
+					}
+					setmax();
+				}
+			}
+			function check(inc_x,inc_y) {
+				if (sandwich==0) {
+					if (r==0) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-2>-1 && y+inc_y-2<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-2][x+inc_x].bgColor=="white" || box[y+inc_y-2][x+inc_x].bgColor=="" || box[y+inc_y-2][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==1) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-2>-1 && y+inc_y-2<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-2][x+inc_x+1].bgColor=="white" || box[y+inc_y-2][x+inc_x+1].bgColor=="" || box[y+inc_y-2][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==2) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==3) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==4) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y-1][x+inc_x-1].bgColor=="white" || box[y+inc_y-1][x+inc_x-1].bgColor=="" || box[y+inc_y-1][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==5) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;	
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==6) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-2>-1 && y+inc_y-2<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-2][x+inc_x].bgColor=="white" || box[y+inc_y-2][x+inc_x].bgColor=="" || box[y+inc_y-2][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-3>-1 && y+inc_y-3<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-3][x+inc_x].bgColor=="white" || box[y+inc_y-3][x+inc_x].bgColor=="" || box[y+inc_y-3][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+				}
+				if (sandwich==1) {
+					if (r==0) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+2>-1 && x+inc_x+2<10 && !(box[y+inc_y][x+inc_x+2].bgColor=="white" || box[y+inc_y][x+inc_x+2].bgColor=="" || box[y+inc_y][x+inc_x+2].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==1) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y+1][x+inc_x+1].bgColor=="white" || box[y+inc_y+1][x+inc_x+1].bgColor=="" || box[y+inc_y+1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x+2>-1 && x+inc_x+2<10 && !(box[y+inc_y+1][x+inc_x+2].bgColor=="white" || box[y+inc_y+1][x+inc_x+2].bgColor=="" || box[y+inc_y+1][x+inc_x+2].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==2) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==3) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y+1][x+inc_x+1].bgColor=="white" || box[y+inc_y+1][x+inc_x+1].bgColor=="" || box[y+inc_y+1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==4) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==5) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-81 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;	
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==6) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+2>-1 && x+inc_x+2<10 && !(box[y+inc_y][x+inc_x+2].bgColor=="white" || box[y+inc_y][x+inc_x+2].bgColor=="" || box[y+inc_y][x+inc_x+2].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+				}
+				if (sandwich==2) {
+					if (r==0) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+2>-1 && y+inc_y+2<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+2][x+inc_x].bgColor=="white" || box[y+inc_y+2][x+inc_x].bgColor=="" || box[y+inc_y+2][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==1) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y+1][x+inc_x-1].bgColor=="white" || box[y+inc_y+1][x+inc_x-1].bgColor=="" || box[y+inc_y+1][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+2>-1 && y+inc_y+2<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y+2][x+inc_x-1].bgColor=="white" || box[y+inc_y+2][x+inc_x-1].bgColor=="" || box[y+inc_y+2][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==2) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==3) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==4) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y-1][x+inc_x-1].bgColor=="white" || box[y+inc_y-1][x+inc_x-1].bgColor=="" || box[y+inc_y-1][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==5) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;	
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==6) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-2>-1 && y+inc_y-2<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-2][x+inc_x].bgColor=="white" || box[y+inc_y-2][x+inc_x].bgColor=="" || box[y+inc_y-2][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+				}
+					if (sandwich==3) {
+					if (r==0) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-2>-1 && x+inc_x-2<10 && !(box[y+inc_y][x+inc_x-2].bgColor=="white" || box[y+inc_y][x+inc_x-2].bgColor=="" || box[y+inc_y][x+inc_x-2].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==1) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y-1][x+inc_x-1].bgColor=="white" || box[y+inc_y-1][x+inc_x-1].bgColor=="" || box[y+inc_y-1][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x-2>-1 && x+inc_x-2<10 && !(box[y+inc_y-1][x+inc_x-2].bgColor=="white" || box[y+inc_y-1][x+inc_x-2].bgColor=="" || box[y+inc_y-1][x+inc_x-2].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==2) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==3) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y+1][x+inc_x+1].bgColor=="white" || box[y+inc_y+1][x+inc_x+1].bgColor=="" || box[y+inc_y+1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==4) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y-1][x+inc_x+1].bgColor=="white" || box[y+inc_y-1][x+inc_x+1].bgColor=="" || box[y+inc_y-1][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==5) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y+1>-1 && y+inc_y+1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y+1][x+inc_x].bgColor=="white" || box[y+inc_y+1][x+inc_x].bgColor=="" || box[y+inc_y+1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;	
+						if(y+inc_y-1>-1 && y+inc_y-1<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y-1][x+inc_x].bgColor=="white" || box[y+inc_y-1][x+inc_x].bgColor=="" || box[y+inc_y-1][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+					if (r==6) {
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x>-1 && x+inc_x<10 && !(box[y+inc_y][x+inc_x].bgColor=="white" || box[y+inc_y][x+inc_x].bgColor=="" || box[y+inc_y][x+inc_x].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x-1>-1 && x+inc_x-1<10 && !(box[y+inc_y][x+inc_x-1].bgColor=="white" || box[y+inc_y][x+inc_x-1].bgColor=="" || box[y+inc_y][x+inc_x-1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+1>-1 && x+inc_x+1<10 && !(box[y+inc_y][x+inc_x+1].bgColor=="white" || box[y+inc_y][x+inc_x+1].bgColor=="" || box[y+inc_y][x+inc_x+1].bgColor=="#FFFFFF"))
+							return false;
+						if(y+inc_y>-1 && y+inc_y<20 && x+inc_x+2>-1 && x+inc_x+2<10 && !(box[y+inc_y][x+inc_x+2].bgColor=="white" || box[y+inc_y][x+inc_x+2].bgColor=="" || box[y+inc_y][x+inc_x+2].bgColor=="#FFFFFF"))
+							return false;
+						return true;
+					}
+				}
+			}
+			gravity();
+		</script>
+	</body>
+</html>
